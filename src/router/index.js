@@ -3,7 +3,7 @@ import { createWebHistory, createRouter } from "vue-router";
 import mainHome from "@/pages/mainHome.vue";
 import memoHome from "@/pages/memo/memoHome.vue";
 import calendarHome from "@/pages/calendar/calendarHome.vue";
-import login from "@/components/login.vue";
+import login from "@/components/Login.vue";
 
 const routes = [
   {
