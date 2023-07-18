@@ -4,6 +4,7 @@ import mainHome from "@/pages/mainHome.vue";
 import memoHome from "@/pages/memo/memoHome.vue";
 import calendarHome from "@/pages/calendar/calendarHome.vue";
 import login from "@/components/Login.vue";
+import join from "@/components/Join.vue";
 
 const routes = [
   {
@@ -25,6 +26,11 @@ const routes = [
     path: "/login",
     name: "login",
     component: login,
+  },
+  {
+    path: "/join",
+    name: "join",
+    component: join,
   },
 ];
 

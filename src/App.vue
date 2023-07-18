@@ -9,7 +9,7 @@
       <article class="title">Toolbox</article>
       <article class="buttons">
         <router-link to="/login">
-          <button>Login</button>
+          <button class="login">Login</button>
         </router-link>
       </article>
     </section>
@@ -67,8 +67,15 @@ export default {
         width: 5rem;
         border: solid #c8c8c8 1px;
         border-radius: 5px;
-        background-color: #4158D0;
-        color: #fff;
+      }
+
+      button.login {
+          background-color: #4158D0;
+          color: #fff;
+      }
+      button.join {
+          background-color: #8823db;
+          color: #fff;
       }
     }
   }
