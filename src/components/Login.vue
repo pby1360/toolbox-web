@@ -3,27 +3,66 @@
     <section class="login-box">
       <p class="login-title">로그인</p>
       <div class="login-buttons">
-        <button class="kakao">카카오 로그인</button>
-        <button class="naver">Naver 로그인</button>
-        <button @click="loginWithGoogle" class="google">Google 로그인</button>
+        <button @click="loginWithKakao" class="kakao"></button>
+        <button @click="loginWithNaver" class="naver"></button>
+        <button @click="googleLogin" class="google"></button>
       </div>
     </section>
   </div>
-  <div id="my-signin2" style="display: none"></div>
 </template>
 
 <script setup>
-const baseURL = import.meta.env.VITE_BASE_URL + '/auth/google-login';
-// const baseURL = 'http://localhost:3000/login';
+import axios from 'axios';
+import { onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
-const loginWithGoogle = () => {
+const route = useRoute();
+const router = useRouter();
+const store = useStore();
+
+const baseURL = import.meta.env.VITE_BASE_URL;
+const clientURL = import.meta.env.VITE_CLIENT_URL;
+const redirectURI = `${clientURL}/login`;
+
+const GOOGLE_CLIENT_ID = '676639504875-a0lpq23f7nvdnj3n4tojeh7mqc339jfg.apps.googleusercontent.com';
+
+onMounted(() => {
+  if (route.query.code) {
+    loginWithGoogle(route.query.code);
+  }
+});
+
+const googleLogin = () => {
   const url = 'https://accounts.google.com/o/oauth2/v2/auth?client_id=' +
-    '676639504875-a0lpq23f7nvdnj3n4tojeh7mqc339jfg.apps.googleusercontent.com' +
+    GOOGLE_CLIENT_ID +
     '&redirect_uri=' +
-    baseURL +
+    // baseURL +
+    redirectURI +
     '&response_type=code' +
     '&scope=email profile';
   window.location = url;
+}
+
+const loginWithGoogle = async (code)  => {
+  await axios.get(`${baseURL}/auth/google-login?code=${code}`)
+  .then(response => {
+    const jsonStr = JSON.stringify(response.data);
+    localStorage.setItem('auth', jsonStr);
+    store.commit('setUser', response.data);
+    store.commit('setLogin', true);
+    router.push('/');
+  }).catch(error => {
+    console.log(error);
+  })
+  .finally(() => {});
+}
+
+const loginWithKakao = () => {
+  alert('서비스 준비중 입니다');
+}
+const loginWithNaver = () => {
+  alert('서비스 준비중 입니다');
 }
 </script>
 
@@ -33,13 +72,14 @@ const loginWithGoogle = () => {
   height: 100%;
 
   .login-box {
-    width: 25rem;
-    height: 20rem;
+    width: 20rem;
+    // height: 20rem;
+    // min-height: 15rem;
     border: solid 1px #c8c8c8;
     position: absolute;
     left: 50%;
     top: 50%;
-    margin-left: -12.5rem;
+    margin-left: -10rem;
     margin-top: -10rem;
     border-radius: 8px;
 
@@ -52,24 +92,37 @@ const loginWithGoogle = () => {
     .login-buttons {
       display: flex;
       flex-flow: column;
+      padding-bottom: 2rem;
       button {
-        width: 22.5rem;
-        height: 3rem;
         margin: 0.1rem auto;
         border-radius: 3px;
         font-weight: bold;
 
+        &:hover {
+          border: solid 2px skyblue;
+        }
+
         &.kakao {
-          background-color: #F7C600;
-          border: solid 1px #F7C600;
+          width: 16.5rem;
+          height: 3.75rem;
+          background-position: center;
+          background-size: contain;
+          background-color: #FEE500;
+          background-image: url(src/assets/kakao_login_large_narrow.png);
         }
         &.google {
-          border: solid 1px #e8e8e8;
-
+          width: 17rem;
+          height: 4rem;
+          background-size: cover;
+          background-image: url(src/assets/btn_google_signin_light_normal_web@2x.png);
         }
         &.naver {
-          background-color: #1DC800;
-          border: solid 1px #1DC800;
+          width: 16.5rem;
+          height: 3.75rem;
+          background-position: center;
+          background-size: contain;
+          background-color: #03C75A;
+          background-image: url(src/assets/btnG_완성형.png);
         }
       }
     }
