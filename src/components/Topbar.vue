@@ -7,32 +7,35 @@
       </article>
       <article class="title">Toolbox</article>
       <article class="buttons">
-        <router-link v-if="!isLoggedin" to="/login">
-          <button class="login">Login</button>
-        </router-link>
-        <a v-else>
-          <v-text-field>Hello! {{ user.name }}</v-text-field>
-          <button  class="logout" @click="logout">Logout</button>
-        </a>
+        <div v-if="!isLoggedin">
+          <router-link  to="/login">
+            <v-btn variant="outlined" class="login">Login</v-btn>
+          </router-link>
+        </div>
+        <div v-else>
+          <span>Hello! {{ user.name }}</span>
+          <v-btn variant="outlined" class="logout" @click="logout">Logout</v-btn>
+        </div>
       </article>
     </section>
 </template>
 
 <script setup>
 import { computed } from "vue";
+import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+
+const router = useRouter();
 
 const store = useStore();
 const isLoggedin = computed(() => store.getters.isLogin);
 const user = computed(() => store.getters.getUser);
 
-console.log(store);
-
 const logout = () => {
   localStorage.removeItem('auth');
   store.commit('setLogin', !isLoggedin);
   store.commit('setUser', {});
-  this.$router.go(0);
+  router.replace('/');
 }
 
 
@@ -69,21 +72,12 @@ const logout = () => {
     display: flex;
     justify-content: flex-end;
     
-    a {
+    div {
       margin: auto 0;
-      
       button {
-        margin: auto;
-        height: 2.25rem;
-        width: 5rem;
-        border: solid #c8c8c8 1px;
-        border-radius: 5px;
-      }
-
-      button.login {
-          background-color: #4158D0;
-          color: #fff;
-      }
+        margin: auto 0.5rem
+      }      
+      
     }
   }
 }

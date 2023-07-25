@@ -16,7 +16,6 @@ export default createStore({
   },
   mutations: {
     setLogin(state, value) {
-      console.log(value);
       state.isLoggedIn = value;
     },
     setUser(state, value) {

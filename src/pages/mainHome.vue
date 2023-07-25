@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <ul class="menu">
+    <ul v-if="isLoggedin" class="menu">
       <li>
         <router-link  to="/memo">memo</router-link>
       </li>
@@ -12,6 +12,12 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
+import { useStore } from "vuex";
+
+const store = useStore();
+const isLoggedin = computed(() => store.getters.isLogin);
+
 </script>
 
 <style lang="scss" scoped>
