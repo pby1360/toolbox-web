@@ -1,11 +1,15 @@
 <template>
   <section class="top-bar">
-      <article class="logo">
+      <!-- <article class="logo">
         <router-link to="/">
           <img src="@/assets/logo.svg" />
         </router-link>
+      </article> -->
+      <article class="title">
+        <router-link to="/">
+          Toolbox
+        </router-link>
       </article>
-      <article class="title">Toolbox</article>
       <article class="buttons">
         <div v-if="!isLoggedin">
           <router-link  to="/login">
@@ -44,28 +48,30 @@ const logout = () => {
 <style lang="scss" scoped>
 .top-bar {
   height: 3.5rem;
-  width: 100%;
-  padding: 0.5rem;
+  padding: 0.25rem;
 
   background-color: #4158D0;
   background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
 
   display: flex;
 
-  .logo {
-    flex: 1;
-    margin: auto;
-    img {
-      height: 2rem;
-    }
-  }
   .title {
     flex: 1;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #fff;
     text-align: center;
-    margin: auto;
+    margin: auto 1rem;
+    display: flex;
+    justify-content: flex-start;
+
+    a {
+      text-decoration: none;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #fff;
+
+      &:hover {
+        color: #e8e8e8;
+      }
+    }
   }
   .buttons {
     flex: 1;
@@ -74,8 +80,10 @@ const logout = () => {
     
     div {
       margin: auto 0;
+
       button {
-        margin: auto 0.5rem
+        margin: auto 0.5rem;
+        cursor: pointer;
       }      
       
     }
