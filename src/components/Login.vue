@@ -37,7 +37,6 @@ const googleLogin = () => {
   const url = 'https://accounts.google.com/o/oauth2/v2/auth?client_id=' +
     GOOGLE_CLIENT_ID +
     '&redirect_uri=' +
-    // baseURL +
     redirectURI +
     '&response_type=code' +
     '&scope=email profile';
@@ -108,13 +107,13 @@ const loginWithNaver = () => {
           background-position: center;
           background-size: contain;
           background-color: #FEE500;
-          background-image: url(src/assets/kakao_login_large_narrow.png);
+          background-image: url(@/assets/kakao_login_large_narrow.png);
         }
         &.google {
           width: 17rem;
           height: 4rem;
           background-size: cover;
-          background-image: url(src/assets/btn_google_signin_light_normal_web@2x.png);
+          background-image: url(@/assets/btn_google_signin_light_normal_web@2x.png);
         }
         &.naver {
           width: 16.5rem;
@@ -122,7 +121,7 @@ const loginWithNaver = () => {
           background-position: center;
           background-size: contain;
           background-color: #03C75A;
-          background-image: url(src/assets/btnG_완성형.png);
+          background-image: url(@/assets/btnG_완성형.png);
         }
       }
     }

@@ -35,26 +35,6 @@ const navItems = [
     to: "/",
     disabled: true,
   },
-  {
-    name: "tool5",
-    to: "/",
-    disabled: true,
-  },
-  {
-    name: "tool6",
-    to: "/",
-    disabled: true,
-  },
-  {
-    name: "tool7",
-    to: "/",
-    disabled: true,
-  },
-  {
-    name: "tool8",
-    to: "/",
-    disabled: true,
-  },
 ];
 const store = useStore();
 const isLoggedin = computed(() => store.getters.isLogin);
@@ -66,9 +46,9 @@ const isLoggedin = computed(() => store.getters.isLogin);
   height: 100%;
   display: flex;
   .toolbox-items {
-    width: 50%;
     margin: auto;
     display: flex;
+    flex-flow: column;
     flex-wrap: wrap;
     justify-content: center;
     gap: 0.5rem;
