@@ -27,7 +27,12 @@ onMounted(() => init());
 
 const init = () => getMemo();
 
-const getMemo = () => axios.get('/v1/api/memo').then(response => list.value = response.data);
+const getMemo = async () => {
+  store.commit('setLoading', true);
+  await axios.get('/v1/api/memo')
+  .then(response => list.value = response.data)
+  .finally(() => store.commit('setLoading', false));
+}
 
 const addNewMemo = () => list.value.push({title: '', content: '', userId: user.value.id});
 

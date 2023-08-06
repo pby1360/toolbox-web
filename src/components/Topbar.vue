@@ -30,8 +30,8 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
 const router = useRouter();
-
 const store = useStore();
+
 const isLoggedin = computed(() => store.getters.isLogin);
 const user = computed(() => store.getters.getUser);
 

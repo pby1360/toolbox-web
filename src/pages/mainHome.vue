@@ -48,7 +48,7 @@ const isLoggedin = computed(() => store.getters.isLogin);
   .toolbox-items {
     margin: auto;
     display: flex;
-    flex-flow: column;
+    // flex-flow: column;
     flex-wrap: wrap;
     justify-content: center;
     gap: 0.5rem;

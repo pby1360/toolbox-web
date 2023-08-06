@@ -44,6 +44,7 @@ const googleLogin = () => {
 }
 
 const loginWithGoogle = async (code)  => {
+  store.commit('setLoading', true);
   await axios.get(`${baseURL}/auth/google-login?code=${code}`)
   .then(response => {
     const jsonStr = JSON.stringify(response.data);
@@ -54,7 +55,7 @@ const loginWithGoogle = async (code)  => {
   }).catch(error => {
     console.log(error);
   })
-  .finally(() => {});
+  .finally(() => store.commit('setLoading', false));
 }
 
 const loginWithKakao = () => {

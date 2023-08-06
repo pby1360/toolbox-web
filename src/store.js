@@ -3,6 +3,7 @@ import { createStore } from "vuex";
 export default createStore({
   state: {
     isLoggedIn: false,
+    isLoading: false,
     user: {},
   },
   getters: {
@@ -11,8 +12,10 @@ export default createStore({
     },
     getUser(state) {
       return state.user;
-    }
-
+    },
+    isLoading(state) {
+      return state.isLoading;
+    },
   },
   mutations: {
     setLogin(state, value) {
@@ -20,6 +23,9 @@ export default createStore({
     },
     setUser(state, value) {
       state.user = value;
+    },
+    setLoading(state, value) {
+      state.isLoading = value;
     }
   }
 });

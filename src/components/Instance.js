@@ -22,6 +22,16 @@ instance.interceptors.response.use(
     return res;
   },
   (error) => {
+    if (error.response.data == 'TOKEN_EXPIRED') {
+      alert('Authentication expired!');
+
+      store.commit('setUser', {});
+      store.commit('setLogin', false);
+      localStorage.removeItem('auth');
+
+      location.replace('/login');
+      return;
+    }
     return Promise.reject(error);
   }
 );
