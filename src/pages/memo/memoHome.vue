@@ -1,11 +1,9 @@
 <template>
   <div>
-    <section class="memo-control">
-      <v-btn @click="addNewMemo">생성</v-btn>
-    </section>
+    <v-btn class="floating-button-add" icon="mdi-plus" @click="addNewMemo" size="large"></v-btn>
     <section class="memo-container">
       <template v-for="memo in list" :key="memo.id">
-        <Memo :memo="memo"></Memo>
+        <Memo :memo="memo" @onComplete="refresh" @remove="remove"></Memo>
       </template>
     </section>
   </div>
@@ -29,22 +27,31 @@ const init = () => getMemo();
 
 const getMemo = async () => {
   store.commit('setLoading', true);
-  await axios.get('/v1/api/memo')
+  const userId = store.getters.getUser.id;
+  await axios.get(`/v1/api/memo/users/${userId}`)
   .then(response => list.value = response.data)
+  .catch(error => alert('작업을 실패했습니다.'))
   .finally(() => store.commit('setLoading', false));
 }
 
-const addNewMemo = () => list.value.push({title: '', content: '', userId: user.value.id});
-
+const addNewMemo = () => list.value.push({uuid: self.crypto.randomUUID(), title: '', content: '', userId: user.value.id});
+const refresh = async () => await getMemo();
+const remove = (uuid) => {
+  const newList = list.value.filter(item => item.uuid != uuid);
+  list.value = newList;
+}
 </script>
 
 <style lang="scss" scoped>
-.memo-control {
-  margin: 1rem;
-}
 .memo-container {
   margin: 1rem;
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
+}
+.floating-button-add {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
 }
 </style>

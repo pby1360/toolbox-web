@@ -5,19 +5,12 @@ import App from './App.vue'
 import router from '@/router/index.js';
 import authAxios from 'axios';
 import axios from './components/Instance';
-import { createVuetify } from 'vuetify';
-import * as components from 'vuetify/components';
-import * as directives from 'vuetify/directives';
+import vuetify from './plugins/vuetify';
 import 'vuetify/dist/vuetify.min.css';
 
 import { loadFonts } from './plugins/webfontloader'
 
 import store from './store';
-
-const vuetify = createVuetify({
-  components,
-  directives,
-});
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 
