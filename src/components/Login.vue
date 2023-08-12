@@ -49,6 +49,7 @@ const loginWithGoogle = async (code)  => {
   .then(response => {
     const jsonStr = JSON.stringify(response.data);
     localStorage.setItem('auth', jsonStr);
+    localStorage.setItem('profile_image', response.data.image);
     store.commit('setUser', response.data);
     store.commit('setLogin', true);
     router.push('/');
