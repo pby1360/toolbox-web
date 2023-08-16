@@ -34,7 +34,7 @@ const getMemo = async () => {
   .finally(() => store.commit('setLoading', false));
 }
 
-const addNewMemo = () => list.value.push({uuid: self.crypto.randomUUID(), title: '', content: '', userId: user.value.id});
+const addNewMemo = () => list.value.push({uuid: crypto.randomUUID(), title: '', content: '', userId: user.value.id});
 const refresh = async () => await getMemo();
 const remove = (uuid) => {
   const newList = list.value.filter(item => item.uuid != uuid);

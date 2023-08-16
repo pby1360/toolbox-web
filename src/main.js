@@ -6,7 +6,7 @@ import router from '@/router/index.js';
 import authAxios from 'axios';
 import axios from './components/Instance';
 import vuetify from './plugins/vuetify';
-import 'vuetify/dist/vuetify.min.css';
+
 
 import { loadFonts } from './plugins/webfontloader'
 
