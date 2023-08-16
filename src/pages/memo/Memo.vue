@@ -30,6 +30,7 @@
 
 <script setup>
 import { getCurrentInstance } from "vue";
+import { useStore } from "vuex";
 
 
 const props = defineProps({
@@ -37,13 +38,20 @@ const props = defineProps({
 })
 
 const emit = defineEmits([
-  'onComplete', 'remove'
+  'onSave', 'onDelete', 'remove'
 ])
 
 const axios = getCurrentInstance().proxy.axios;
+const store = useStore();
 
-const saveMemo = async () => await axios.post('/v1/api/memo', props.memo).then(emit('onComplete'));
-const deleteMemo = async () => await axios.delete(`/v1/api/memo/${props.memo.id}`).then(emit('onComplete'));
+const saveMemo = async () => {
+  store.commit('setLoading', true);
+  await axios.post('/v1/api/memo', props.memo).then(response => emit('onSave', props.memo.uuid, response.data)).finally(() => store.commit('setLoading', false));
+}
+const deleteMemo = async () => {
+  store.commit('setLoading', true);
+  await axios.delete(`/v1/api/memo/${props.memo.id}`).then(emit('onDelete', props.memo.id)).finally(() => store.commit('setLoading', false));
+}
 const remove = () => emit('remove', props.memo.uuid);
 </script>
 

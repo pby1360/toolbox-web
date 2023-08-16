@@ -3,7 +3,7 @@
     <v-btn class="floating-button-add" icon="mdi-plus" @click="addNewMemo" size="large"></v-btn>
     <section class="memo-container">
       <template v-for="memo in list" :key="memo.id">
-        <Memo :memo="memo" @onComplete="refresh" @remove="remove"></Memo>
+        <Memo :memo="memo" @onSave="onSave" @onDelete="onDelete" @remove="remove"></Memo>
       </template>
     </section>
   </div>
@@ -35,9 +35,20 @@ const getMemo = async () => {
 }
 
 const addNewMemo = () => list.value.push({uuid: crypto.randomUUID(), title: '', content: '', userId: user.value.id});
-const refresh = async () => await getMemo();
+
 const remove = (uuid) => {
   const newList = list.value.filter(item => item.uuid != uuid);
+  list.value = newList;
+}
+
+const onSave = (uuid, memo) => {
+  const index = list.value.findIndex(item => item.uuid == uuid);
+  console.log(index);
+  list.value[index] = memo;
+}
+
+const onDelete = (id) => {
+  const newList = list.value.filter(item => item.id != id);
   list.value = newList;
 }
 </script>
