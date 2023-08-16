@@ -13,6 +13,7 @@
 import { computed, getCurrentInstance, onMounted, ref } from 'vue';
 import { useStore } from "vuex";
 import Memo from "./Memo.vue";
+import {v4 as uuidv4} from 'uuid';
 
 const axios = getCurrentInstance().proxy.axios;
 
@@ -34,7 +35,7 @@ const getMemo = async () => {
   .finally(() => store.commit('setLoading', false));
 }
 
-const addNewMemo = () => list.value.push({uuid: crypto.randomUUID(), title: '', content: '', userId: user.value.id});
+const addNewMemo = () => list.value.push({uuid: uuidv4(), title: '', content: '', userId: user.value.id});
 
 const remove = (uuid) => {
   const newList = list.value.filter(item => item.uuid != uuid);
