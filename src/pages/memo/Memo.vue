@@ -62,11 +62,11 @@ const remove = () => emit('remove', props.memo.uuid);
   border-radius: 5px;
 
   .memo-title {
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
     padding: 0 0.5rem;
     border-bottom: solid 1px #c8c8c8;
-    background-color: #81AFE1;
+    background-color: #fff;
     display: flex;
 
     .icon-button-control {
@@ -76,17 +76,17 @@ const remove = () => emit('remove', props.memo.uuid);
   .memo-content {
     min-height: 10rem;
     padding: 0.5rem;
-    background-color: #D8F3FF;
+    background-color: #fff;
     font-size: 0.9rem;
   }
   .memo-bottom {
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
     padding: 0.5rem;
     font-size: 0.75rem;
     // text-align: end;
     color: #a8a8a8;
-    background-color: #D8F3FF;
+    background-color: #fff;
     display: flex;
     flex-flow: column;
     // justify-content: flex-end;

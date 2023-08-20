@@ -1,69 +1,141 @@
 <template>
-  <div>
-    <v-btn class="floating-button-add" icon="mdi-plus" @click="addNewMemo" size="large"></v-btn>
-    <section class="memo-container">
-      <template v-for="memo in list" :key="memo.id">
-        <Memo :memo="memo" @onSave="onSave" @onDelete="onDelete" @remove="remove"></Memo>
-      </template>
-    </section>
+  <div class="memo-wrap">
+    <transition name="display">
+      <div v-show="!isHidden" class="side">
+        <button v-show="!isHidden" class="toggle-close" @click="isHidden = !isHidden">close</button>
+        <div class="home">
+          <p>Home</p>
+          <v-btn variant="flat" color="info" class="dashboard">Dashboard</v-btn>
+        </div>
+        <div class="workspace-list">
+          <p>Workspace</p>
+          <v-btn v-for="workspace in workspaceList" :key="workspace.id" variant="tonal" color="info" class="workspace">{{ workspace.name }}</v-btn>
+        </div>
+      </div>
+    </transition>
+    <div class="content">
+      <memo-dashboard :list="workspaceList" />
+    </div>
+    <button v-show="isHidden" class="toggle-open" @click="isHidden = !isHidden">open</button>
   </div>
 </template>
 
 <script setup>
-import { computed, getCurrentInstance, onMounted, ref } from 'vue';
+import { getCurrentInstance, onMounted, ref } from "vue";
 import { useStore } from "vuex";
-import Memo from "./Memo.vue";
-import {v4 as uuidv4} from 'uuid';
+import MemoDashboard from "./MemoDashboard.vue";
 
 const axios = getCurrentInstance().proxy.axios;
-
 const store = useStore();
-const user = computed(() => store.getters.getUser);
 
-const list = ref([]);
+const isHidden = ref(false);
+const workspaceList = ref([]);
 
-onMounted(() => init());
+onMounted(() => {
+  getWorkspaceList();
+});
 
-const init = () => getMemo();
-
-const getMemo = async () => {
-  store.commit('setLoading', true);
-  const userId = store.getters.getUser.id;
-  await axios.get(`/v1/api/memo/users/${userId}`)
-  .then(response => list.value = response.data)
-  .catch(error => alert('작업을 실패했습니다.'))
-  .finally(() => store.commit('setLoading', false));
+const getWorkspaceList = async () => {
+  const user = store.getters.getUser;
+  await axios.get(`/v1/api/memo/users/${user.id}/workspace`)
+  .then(response => workspaceList.value = response.data)
+  .finally(() => {
+    store.commit('setLoading', false);
+  });
 }
 
-const addNewMemo = () => list.value.push({uuid: uuidv4(), title: '', content: '', userId: user.value.id});
+// const onSave = (workspace) => workspaceList.value.push(workspace);
 
-const remove = (uuid) => {
-  const newList = list.value.filter(item => item.uuid != uuid);
-  list.value = newList;
-}
 
-const onSave = (uuid, memo) => {
-  const index = list.value.findIndex(item => item.uuid == uuid);
-  console.log(index);
-  list.value[index] = memo;
-}
 
-const onDelete = (id) => {
-  const newList = list.value.filter(item => item.id != id);
-  list.value = newList;
-}
 </script>
 
 <style lang="scss" scoped>
-.memo-container {
-  margin: 1rem;
+.memo-wrap {
+  height: 100%;
+  padding: 0.25rem;
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.1rem;
+  .side {
+    width: 17.5rem;
+    padding: 0.25rem;
+    border: solid 1px #e8e8e8;
+    border-radius: 3px;
+    // box-shadow: #c9c9c9 1px 1px 1px 1px;
+    
+    .home {
+      display: flex;
+      flex-flow: column;
+      padding: 0.25rem;
+      border-radius: 3px;
+      border: solid 1px #c8c8c8;
+      margin-bottom: 0.25rem;
+
+      .dashboard {
+        
+      }
+      
+    }
+
+    .workspace-list {
+      display: flex;
+      flex-flow: column;
+      border-radius: 3px;
+      border: solid 1px #c8c8c8;
+      padding: 0.25rem;
+      gap: 0.1rem;
+      .workspace {
+        
+        .selected {
+          border: solid 1px black;
+        }
+      }
+
+    }
+  }
+  .content {
+    flex: 1;
+    padding: 0.25rem;
+    border: solid 1px #e8e8e8;
+    border-radius: 3px;
+    // margin-left: 0.1rem;
+    text-align: center;
+  }
 }
-.floating-button-add {
-  position: fixed;
-  bottom: 1.5rem;
-  right: 1.5rem;
+
+.toggle-open {
+  position: absolute;
+  writing-mode: vertical-rl;
+  background-color: #fff;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  height: 3rem;
+  border: solid 1px #e8e8e8;
+  width: 1.5rem;
 }
+
+.toggle-close {
+  position: absolute;
+  writing-mode: vertical-rl;
+  top: 3.35rem;
+  left: 17.65rem;
+  background-color: #fff;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  height: 3rem;
+  border: solid 1px #e8e8e8;
+  border-left: none;
+  width: 1.5rem;
+}
+
+.display-enter-active,
+.display-leave-active {
+  transition: opacity 0.2s ease; // 0.3초 동안 투명도 변화
+}
+
+.display-enter-from,
+.display-leave-to {
+  opacity: 0; // 등장하기 시작, 퇴장의 마지막은 투명도 0
+}
+
 </style>

@@ -38,7 +38,6 @@ import { useStore } from "vuex";
 
 const router = useRouter();
 const menuList = router.getRoutes().filter(route => route.meta.isMenu);
-console.log(menuList);
 const store = useStore();
 
 const isLoggedin = computed(() => store.getters.isLogin);
@@ -59,8 +58,10 @@ const logout = () => {
 
 <style lang="scss" scoped>
 .top-bar {
-  height: 3.5rem;
+  height: 3rem;
   padding: 0.25rem;
+  margin: 0.1rem 0.25rem 0 0.25rem;
+  border-radius: 3px;
 
   background-color: #4158D0;
   background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
