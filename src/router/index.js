@@ -2,6 +2,8 @@ import { createWebHistory, createRouter } from "vue-router";
 
 import mainHome from "@/pages/mainHome.vue";
 import memoHome from "@/pages/memo/memoHome.vue";
+import memoDashboard from "@/pages/memo/memoDashboard.vue";
+import memoWorkspace from "@/pages/memo/memoWorkspace.vue";
 import calendarHome from "@/pages/calendar/calendarHome.vue";
 import login from "@/components/Login.vue";
 
@@ -24,7 +26,19 @@ const routes = [
       label: "Memo",
       isMenu: true,
       menuIcon: "mdi-note-text-outline",
-    },    
+    },
+    children: [
+      {
+        path: "",
+        name: "dashboard",
+        component: memoDashboard,
+      },
+      {
+        path: ":id",
+        name: "workspace",
+        component: memoWorkspace,
+      },
+    ],
   },
   {
     path: "/calendar",

@@ -10,7 +10,7 @@ import vuetify from './plugins/vuetify';
 
 import { loadFonts } from './plugins/webfontloader'
 
-import store from './store';
+import store from '@/store/store.js';
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 

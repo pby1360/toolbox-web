@@ -59,38 +59,39 @@
     </v-dialog>
     <div class="workspace-list">
       <p>목록</p>
-      <div class="workspace" v-for="workspace in list" :key="workspace.id">
+      <div class="workspace" v-for="workspace in workspaceList" :key="workspace.id">
         <span>{{ workspace.name }}</span>
         <span>{{ workspace.description }}</span>
         <span>{{ workspace.createdAt }}</span>
-        <span>{{ workspace.modifiedAt }}</span>
-        <v-btn color="info" @click="modify(workspace.id)">수정</v-btn>
-        <v-btn color="red" @click="remove(workspace.id)">삭제</v-btn>
+        <!-- <span>{{ workspace.modifiedAt }}</span> -->
+        <v-btn variant="outlined" color="info" @click="modify(workspace.id)" style="margin-right: 0.1rem;">수정</v-btn>
+        <v-btn variant="outlined" color="red" @click="remove(workspace.id)">삭제</v-btn>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { getCurrentInstance, ref } from "vue";
+import { computed, getCurrentInstance, ref } from "vue";
 import { useStore } from "vuex";
 
 const axios = getCurrentInstance().proxy.axios;
 const store = useStore();
 
-const props = defineProps({
-  list: Array,
-});
+const workspaceList = computed(() => store.getters['memoStore/getWorkspaceList']);
 
 const dialog = ref(false);
 const formData = ref({});
 
+// onMounted(() => {});
+
 const save = async () => {
+  store.commit('setLoading', true);
   const user = store.getters.getUser;
   formData.value.userId = user.id;
   await axios.post(`/v1/api/memo/users/${user.id}/workspace`, formData.value)
   .then(response => {
-    props.list.push(response.data);
+    store.getters['memoStore/getWorkspaceList'].push(response.data);
     formData.value = {};
   })
   .finally(() => {
@@ -100,14 +101,19 @@ const save = async () => {
 }
 
 const modify = async (id) => {
+  store.commit('setLoading', true);
+  const list = store.getters['memoStore/getWorkspaceList'];
+  const index = list.findIndex((workspace => workspace.id === id));  
+  const data = list[index];
+  data.description = data.description + '!';
+
   const user = store.getters.getUser;
-  const index = props.list.findIndex((workspace => workspace.id === id));
-  const data = props.list[index];
   
   await axios.put(`/v1/api/memo/users/${user.id}/workspace/${id}`, data)
   .then(response => {
-    props.list[index] = response.data;
+    list[index] = response.data;
   })
+  .catch(error => console.error(error))
   .finally(() => {
     store.commit('setLoading', false);
     dialog.value = false;
@@ -115,12 +121,14 @@ const modify = async (id) => {
 }
 
 const remove = async (id) => {
+  store.commit('setLoading', true);
+
   const user = store.getters.getUser;
   await axios.delete(`/v1/api/memo/users/${user.id}/workspace/${id}`)
   .then(() => {
-    // const newList = props.list.filter(workspace => workspace.id != id);
-    const index = props.list.findIndex((workspace => workspace.id === id));
-    props.list.splice(index, 1);
+    const list = store.getters['memoStore/getWorkspaceList'];
+    const index = list.findIndex((workspace => workspace.id === id));
+    list.splice(index, 1);
   })
   .finally(() => {
     store.commit('setLoading', false);

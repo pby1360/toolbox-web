@@ -2,34 +2,38 @@
   <div class="memo-wrap">
     <transition name="display">
       <div v-show="!isHidden" class="side">
-        <button v-show="!isHidden" class="toggle-close" @click="isHidden = !isHidden">close</button>
         <div class="home">
           <p>Home</p>
-          <v-btn variant="flat" color="info" class="dashboard">Dashboard</v-btn>
+          <v-btn to="/memo" variant="flat" color="info" class="dashboard">Dashboard</v-btn>
         </div>
         <div class="workspace-list">
           <p>Workspace</p>
-          <v-btn v-for="workspace in workspaceList" :key="workspace.id" variant="tonal" color="info" class="workspace">{{ workspace.name }}</v-btn>
+          <v-btn v-for="workspace in workspaceList" :key="workspace.id" variant="tonal" color="info" class="workspace" :to="`/memo/${workspace.id}`">{{ workspace.name }}</v-btn>
+        </div>
+        <div class="toggle">
+          <v-btn variant="flat" color="grey" @click="isHidden = true">minimun</v-btn>
         </div>
       </div>
     </transition>
-    <div class="content">
-      <memo-dashboard :list="workspaceList" />
-    </div>
     <button v-show="isHidden" class="toggle-open" @click="isHidden = !isHidden">open</button>
+    <div class="content">
+      <!-- <keep-alive> -->
+      <router-view :key="$route.fullPath" />
+      <!-- </keep-alive> -->
+    </div>
   </div>
 </template>
 
 <script setup>
-import { getCurrentInstance, onMounted, ref } from "vue";
+import { computed, getCurrentInstance, onMounted, ref } from "vue";
 import { useStore } from "vuex";
-import MemoDashboard from "./MemoDashboard.vue";
+
 
 const axios = getCurrentInstance().proxy.axios;
 const store = useStore();
 
 const isHidden = ref(false);
-const workspaceList = ref([]);
+const workspaceList = computed(() => store.getters['memoStore/getWorkspaceList']);
 
 onMounted(() => {
   getWorkspaceList();
@@ -38,15 +42,11 @@ onMounted(() => {
 const getWorkspaceList = async () => {
   const user = store.getters.getUser;
   await axios.get(`/v1/api/memo/users/${user.id}/workspace`)
-  .then(response => workspaceList.value = response.data)
+  .then(response => store.commit('memoStore/setWorkspaceList', response.data))
   .finally(() => {
     store.commit('setLoading', false);
   });
 }
-
-// const onSave = (workspace) => workspaceList.value.push(workspace);
-
-
 
 </script>
 
@@ -61,8 +61,8 @@ const getWorkspaceList = async () => {
     padding: 0.25rem;
     border: solid 1px #e8e8e8;
     border-radius: 3px;
-    // box-shadow: #c9c9c9 1px 1px 1px 1px;
-    
+    display: flex;
+    flex-flow: column;
     .home {
       display: flex;
       flex-flow: column;
@@ -70,13 +70,8 @@ const getWorkspaceList = async () => {
       border-radius: 3px;
       border: solid 1px #c8c8c8;
       margin-bottom: 0.25rem;
-
-      .dashboard {
-        
-      }
-      
+      .dashboard {}
     }
-
     .workspace-list {
       display: flex;
       flex-flow: column;
@@ -84,13 +79,13 @@ const getWorkspaceList = async () => {
       border: solid 1px #c8c8c8;
       padding: 0.25rem;
       gap: 0.1rem;
-      .workspace {
-        
-        .selected {
-          border: solid 1px black;
-        }
-      }
-
+      .workspace {}
+    }
+    .toggle {
+      flex: 1;
+      display: flex;
+      flex-flow: column;
+      justify-content: flex-end;
     }
   }
   .content {
@@ -105,26 +100,15 @@ const getWorkspaceList = async () => {
 
 .toggle-open {
   position: absolute;
+  bottom: 0;
+  margin-bottom: 0.25rem;
   writing-mode: vertical-rl;
-  background-color: #fff;
+  background-color: #9e9e9e;
+  color: #fff;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
   height: 3rem;
   border: solid 1px #e8e8e8;
-  width: 1.5rem;
-}
-
-.toggle-close {
-  position: absolute;
-  writing-mode: vertical-rl;
-  top: 3.35rem;
-  left: 17.65rem;
-  background-color: #fff;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-  height: 3rem;
-  border: solid 1px #e8e8e8;
-  border-left: none;
   width: 1.5rem;
 }
 

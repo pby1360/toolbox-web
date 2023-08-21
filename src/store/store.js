@@ -1,5 +1,7 @@
 import { createStore } from "vuex";
 
+import memoStore from "./memoStore";
+
 export default createStore({
   state: {
     isLoggedIn: false,
@@ -27,5 +29,8 @@ export default createStore({
     setLoading(state, value) {
       state.isLoading = value;
     }
-  }
+  },
+  modules: {
+    memoStore: memoStore,
+  },
 });
