@@ -1,13 +1,13 @@
 const memoStore = {
   namespaced: true,
   state: {
-      workspaceList: [],
+      projectList: [],
   },
   getters: {
-    getWorkspaceList: state => state.workspaceList,
+    getProjectList: state => state.projectList,
   },
   mutations: {
-      setWorkspaceList: (state, value) => state.workspaceList = value,
+    setProjectList: (state, value) => state.projectList = value,
   },
 }
 

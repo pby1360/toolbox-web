@@ -16,7 +16,7 @@
     <article class="buttons">
       <div v-if="!isLoggedin">
         <router-link  to="/login">
-          <v-btn variant="outlined" class="login">Login</v-btn>
+          <v-btn color="black" variant="outlined" class="login">Login</v-btn>
         </router-link>
       </div>
       <div v-else>
@@ -24,7 +24,7 @@
           <v-img v-if="profileImageUrl" :src="profileImageUrl"></v-img>
           <v-icon v-else size="x-large" icon="mdi-account-circle"></v-icon>
         </v-avatar> -->
-        <v-btn variant="outlined" class="logout" @click="logout">Logout</v-btn>
+        <v-btn color="black" variant="tonal" class="logout" @click="logout">Logout</v-btn>
       </div>
     </article>
   </section>
@@ -60,11 +60,11 @@ const logout = () => {
 .top-bar {
   height: 3rem;
   padding: 0.25rem;
-  margin: 0.1rem 0.25rem 0 0.25rem;
-  border-radius: 3px;
+  margin: 0.1rem 0 0 0rem;
+  border-bottom: solid 1px #c8c8c8;
+  background-color: #fff;
 
-  background-color: #4158D0;
-  background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
+  // background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
 
   display: flex;
 
@@ -72,7 +72,7 @@ const logout = () => {
     flex: 1;
     display: flex;
     justify-content: center;
-    flex-flow: column;
+    flex-flow: column;    
     i {
       margin-left: 5%;
     }
@@ -89,7 +89,7 @@ const logout = () => {
       text-decoration: none;
       font-size: 1.5rem;
       font-weight: bold;
-      color: #fff;
+      color: #000;
 
       &:hover {
         color: #e8e8e8;

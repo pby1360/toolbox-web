@@ -4,6 +4,7 @@ import mainHome from "@/pages/mainHome.vue";
 import memoHome from "@/pages/memo/memoHome.vue";
 import memoDashboard from "@/pages/memo/memoDashboard.vue";
 import memoWorkspace from "@/pages/memo/memoWorkspace.vue";
+import memoProject from "@/pages/memo/memoProject.vue";
 import calendarHome from "@/pages/calendar/calendarHome.vue";
 import login from "@/components/Login.vue";
 
@@ -34,9 +35,9 @@ const routes = [
         component: memoDashboard,
       },
       {
-        path: ":id",
-        name: "workspace",
-        component: memoWorkspace,
+        path: "project/:id",
+        name: "project",
+        component: memoProject,
       },
     ],
   },
