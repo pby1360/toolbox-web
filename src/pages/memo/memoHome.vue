@@ -65,7 +65,10 @@
           </section>
           <section class="project-list">
             <v-btn to="/memo" variant="text" color="primary" class="dashboard rounded-0 mb-1">Dashboard</v-btn>
-            <v-btn v-for="project in projectList" :key="project.id" variant="text" color="info" class="project rounded-0" :to="`/memo/project/${project.id}`">{{ project.name }}</v-btn>
+            <div class="project" v-for="project in projectList" :key="project.id">
+              <v-btn class="a-project rounded-0" :class="{ active: selected == project.id }" variant="text" color="info" :to="`/memo/project/${project.id}`">{{ project.name }}</v-btn>
+              <v-btn class="a-workspace rounded-0" v-show="selected==project.id" v-for="workspace in project.workspaceList" :key="workspace.id" variant="text" color="success" :to="`/memo/project/${project.id}/workspace/${workspace.id}`">{{ workspace.name }}</v-btn>
+            </div>
           </section>
         </div>
         <div class="toggle">
@@ -83,7 +86,8 @@
 </template>
 
 <script setup>
-import { computed, getCurrentInstance, onMounted, ref } from "vue";
+import { computed, getCurrentInstance, onMounted, ref, watch } from "vue";
+import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 
 
@@ -93,14 +97,25 @@ const store = useStore();
 const isHidden = ref(false);
 const projectList = computed(() => store.getters['memoStore/getProjectList']);
 
-onMounted(() => {
-  getprojectList();
-});
+const selected = ref(null);
 
 const dialog = ref(false);
 const formData = ref({});
 
-// onMounted(() => {});
+const route = useRoute();
+watch(
+  route, (value) => {
+    selected.value = value.params.projectId;
+  },
+  { immediate: true }
+);
+
+onMounted(() => {
+  getprojectList();
+});
+
+
+
 
 const save = async () => {
   store.commit('setLoading', true);
@@ -118,6 +133,7 @@ const save = async () => {
 }
 
 const getprojectList = async () => {
+  store.commit('setLoading', true);
   const user = store.getters.getUser;
   await axios.get(`/v1/api/memo/users/${user.id}/project`)
   .then(response => store.commit('memoStore/setProjectList', response.data))
@@ -148,7 +164,18 @@ const getprojectList = async () => {
       .project-list {
         display: flex;
         flex-flow: column;
-        .project {}
+        .project {
+          display: flex;
+          flex-flow: column;
+
+          .a-project.active {
+            background-color: black;
+
+          }
+          .a-workspace {
+              background-color: black;
+          }
+        }
       }
     }
     

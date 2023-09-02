@@ -1,6 +1,7 @@
 <template>
   <div>
-    workspace {{ id }}
+    project {{ projectId }}
+    workspace {{ workspaceId }}
   </div>
 </template>
 
@@ -9,10 +10,11 @@ import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
-console.log(route);
-const id = ref();
-id.value = route.params.id;
-onMounted(() => console.log('mounted'));
+const projectId = ref();
+const workspaceId = ref();
+projectId.value = route.params.projectId;
+workspaceId.value = route.params.workspaceId;
+
 </script>
 
 <style lang="scss" scoped>

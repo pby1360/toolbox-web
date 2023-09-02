@@ -35,9 +35,14 @@ const routes = [
         component: memoDashboard,
       },
       {
-        path: "project/:id",
+        path: "project/:projectId",
         name: "project",
         component: memoProject,
+      },
+      {
+        path: "project/:projectId/workspace/:workspaceId",
+        name: "workspace",
+        component: memoWorkspace,
       },
     ],
   },
